@@ -1,5 +1,8 @@
 <template>
-  <div>
-    <NuxtWelcome />
-  </div>
+    <div>
+        <el-button>I am ElButton</el-button>
+    </div>
 </template>
+<script>
+console.log('Ok')
+</script>
