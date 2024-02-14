@@ -10,10 +10,18 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "@firebase/app-types": "^0.9.0",
     "axios": "^1.6.7",
+    "firebase": "^10.8.0",
+    "firebase-admin": "^11.11.1",
+    "firebase-functions": "^4.7.0",
     "nuxt": "^3.10.1",
+    "nuxt-icons": "^3.2.1",
+    "nuxt-vuefire": "^1.0.1",
     "vue": "^3.4.15",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "vuefire": "^3.1.22"
   },
   "devDependencies": {
     "@element-plus/nuxt": "^1.0.7",
