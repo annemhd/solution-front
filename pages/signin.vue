@@ -11,9 +11,14 @@
         </a>
     </el-card>
 </template>
-<script>
+<script setup>
 import { ref } from 'vue'
 
 const email = ref('')
 const password = ref('')
+
+useHead({
+    title: 'Firebase',
+    meta: [{ name: 'description', content: 'My amazing site.' }],
+})
 </script>

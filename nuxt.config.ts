@@ -3,7 +3,6 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   modules: [
     '@element-plus/nuxt',
-    // 'nuxt-vuefire'
   ],
   // vuefire: {
   //   auth: {
