@@ -10,6 +10,7 @@
     </div>
 </template>
 <script setup>
+import 'element-plus/dist/index.css'
 useHead({
     title: 'Firebase',
     meta: [{ name: 'description', content: 'My amazing site.' }],
