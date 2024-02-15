@@ -15,7 +15,7 @@
 import { ref } from 'vue'
 import { auth } from '../firebase.config.js'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-console.log(auth.currentUser)
+
 const email = ref('')
 const password = ref('')
 
@@ -23,9 +23,18 @@ const submit = async () => {
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email.value, password.value)
         const user = userCredential.user
-        console.log('User signed in:', user)
+        console.log(user)
+        const data = {
+            uid: user.reloadUserInfo.localId,
+            email: user.reloadUserInfo.email,
+            createdAt: user.reloadUserInfo.lastLoginAt,
+            lastLoginAt: user.reloadUserInfo.lastLoginAt,
+        }
+
+        localStorage.setItem('TOKEN', JSON.stringify(user.accessToken))
+        localStorage.setItem('user', JSON.stringify(data))
     } catch (error) {
-        console.error('Error signing in:', error.message)
+        console.error('Erreur de connexion :', error.message)
     }
 }
 
