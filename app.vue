@@ -1,8 +1,18 @@
 <template>
-    <div>
-        <el-button>I am ElButton</el-button>
+    <div class="m-4">
+        <client-only>
+            <!-- <el-header> ??? </el-header> -->
+            <el-main>
+                <NuxtPage />
+            </el-main>
+            <el-footer></el-footer>
+        </client-only>
     </div>
 </template>
-<script>
-console.log('Ok')
+<script setup>
+import 'element-plus/dist/index.css'
+useHead({
+    title: 'Firebase',
+    meta: [{ name: 'description', content: 'My amazing site.' }],
+})
 </script>
