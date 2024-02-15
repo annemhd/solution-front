@@ -2,12 +2,13 @@ FROM node:lts-alpine
 
 WORKDIR /app
 
-COPY package.json ./
+RUN apk update && apk upgrade
+RUN apk add git
 
-RUN npm install
+COPY ./package*.json /app/
+
+RUN npm install && npm cache clean --force
 
 COPY . .
-
-EXPOSE 3000
 
 ENV PATH ./node_modules/.bin/:$PATH
