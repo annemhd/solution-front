@@ -15,6 +15,8 @@
 import { ref } from 'vue'
 import { auth } from '../firebase.config.js'
 import { signInWithEmailAndPassword } from 'firebase/auth'
+import { doc, setDoc, getFirestore , getDoc } from 'firebase/firestore'
+
 console.log(auth.currentUser)
 const email = ref('')
 const password = ref('')
@@ -28,6 +30,25 @@ const submit = async () => {
         console.error('Error signing in:', error.message)
     }
 }
+
+ // Initialiser Firestore
+ const db = getFirestore();
+
+// Référence du document que vous souhaitez récupérer
+const docRef = doc(db, "users", "ZUFSzhdgewUs44yWeaM7FqmArWs1");
+
+// Récupérer les données du document
+getDoc(docRef)
+.then((docSnapshot) => {
+if (docSnapshot.exists()) {
+    console.log("Données du document:", docSnapshot.data());
+} else {
+    console.log("Ce document n'existe pas !");
+}
+})
+.catch((error) => {
+console.error("Erreur lors de la récupération du document:", error);
+});
 
 useHead({
     title: 'Firebase',
