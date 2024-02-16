@@ -1,8 +1,7 @@
 <script>
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-import { getStorage, ref, uploadBytesResumable, getDownloadURL , getFirestore } from "firebase/storage";
-const db = getFirestore()
-const storage = getStorage(db);
+const storage = getStorage();
 
 // Create the file metadata
 /** @type {any} */
