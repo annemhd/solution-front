@@ -1,16 +1,25 @@
 <template>
-    <div class="m-4">
-        <client-only>
-            <!-- <el-header> ??? </el-header> -->
-            <el-main>
+    <client-only>
+        <div class="m-4">
+            <NuxtLayout :name="layout">
                 <NuxtPage />
-            </el-main>
-            <el-footer></el-footer>
-        </client-only>
-    </div>
+            </NuxtLayout>
+        </div>
+    </client-only>
 </template>
 <script setup>
-import 'element-plus/dist/index.css'
+const route = useRoute()
+
+const layout = computed(() => {
+    if (route.name === 'signin' || route.name === 'signup') {
+        return 'auth'
+    } else if (route.name === 'dashboard') {
+        return 'dashboard'
+    } else {
+        return 'default'
+    }
+})
+
 useHead({
     title: 'Firebase',
     meta: [{ name: 'description', content: 'My amazing site.' }],

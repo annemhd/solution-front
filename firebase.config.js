@@ -3,6 +3,7 @@ import { initializeApp } from 'firebase/app'
 // import { getAnalytics } from 'firebase/analytics'
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth'
 // import { getFirestore } from 'firebase/firestore'
+import { getStorage, ref } from 'firebase/storage'
 
 // const db = getFirestore()
 
@@ -30,4 +31,7 @@ const forgotPassword = async (email) => {
     }
 }
 
-export { app, auth, forgotPassword }
+// Create a root reference
+const storage = getStorage(app)
+
+export { app, auth, storage, forgotPassword }
