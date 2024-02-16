@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  nuxt:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: nuxt
+    command: npm run dev
+    image: nuxt-app
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    restart: always 
+
+
+
+
+
+
