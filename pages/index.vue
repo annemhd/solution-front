@@ -25,7 +25,7 @@
                     <div class="p-5">
                         <h3 class="product_list_item_name mb-2 text-2xl font-bold tracking-tight text-gray-900">{{ product.name }}</h3>
                         <p class="mb-3 font-normal text-gray-700">{{ product.price }} €</p>
-                        <button type="button" class="product_list_item_button_add text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none">Add to cart</button>
+                        <button type="button" class="product_list_item_button_add text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none" @click="addToCart(product)">Add to cart</button>
                         <button type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2" @click="deleteProduct(product.id)">Delete</button>
                         <button type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2" @click="openEditPopup(product)">Modifier</button>
                     </div>
@@ -56,7 +56,7 @@
 </template>
     
 <script setup>
-    import { addDoc, collection, updateDoc, deleteDoc, doc, getDocs, getFirestore } from 'firebase/firestore';
+    import { addDoc, collection, updateDoc, deleteDoc, getDoc, setDoc, doc, getDocs, getFirestore } from 'firebase/firestore';
     import { onMounted, ref } from 'vue';
     import { app } from '~/firebase.config.js';
 
@@ -65,6 +65,7 @@
     const newProduct = ref({ name: '', price: 0, image: '' })
     const editingProduct = ref(null);
     const isEditingPopupOpen = ref(false);
+    const cartCollection = collection(getFirestore(app), 'cart');
 
     const fetchProducts = async () => {
         const productsCollection = collection(db, 'products')
@@ -79,6 +80,36 @@
 
         console.log('Products:', products.value)
     }
+
+    const addToCart = async (product) => {
+        try {
+            const user = JSON.parse(localStorage.getItem('user'));
+
+            if (user) {
+                const cartItemRef = doc(cartCollection, user.uid + product.id);
+
+                const cartItemDoc = await getDoc(cartItemRef);
+
+                if (cartItemDoc.exists()) {
+                    const currentQuantity = cartItemDoc.data().quantity || 0;
+                    await updateDoc(cartItemRef, { quantity: currentQuantity + 1 });
+                } else {
+                    await setDoc(cartItemRef, {
+                        image: product.image,
+                        price: product.price,
+                        name: product.name,
+                        uid: user.uid,
+                        quantity: 1,
+                    });
+                }
+                console.log('Product added to cart successfully.');
+            } else {
+                console.error('User information not found in local storage.');
+            }
+        } catch (error) {
+            console.error('Error adding product to cart:', error);
+        }
+    };
 
     const addProduct = async (productData) => {
         const productsCollection = collection(db, 'products')
@@ -171,10 +202,11 @@
     .product_list{
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         flex-wrap: wrap;
         column-gap: 24px;
         row-gap: 24px;
+        width: 100%;
     }
     .product_list .product_list_item{
         width: calc(100% / 4 - 18px);

@@ -13,27 +13,19 @@ import { sendPasswordResetEmail } from 'firebase/auth'
 const router = useRouter()
 const email = ref('')
 
-const success = () => {
-    ElMessage({
-        message: 'Le mail de reinitialisation a bien été envoyé',
-        type: 'success',
-    })
-}
-
-const error = () => {
-    ElMessage({
-        message: "Une erreur s'est produite",
-        type: 'error',
-    })
-}
-
 const handleForgotPassword = async () => {
     try {
         await sendPasswordResetEmail(auth, email.value)
         router.push({ path: '/signin' })
-        success()
+        ElMessage({
+            message: 'Le mail de reinitialisation a bien été envoyé',
+            type: 'success',
+        })
     } catch (error) {
-        console.error('Le mail pour reinitialiser:', error.message)
+        ElMessage({
+            message: "Une erreur s'est produite : " + error.message,
+            type: 'error',
+        })
     }
 }
 </script>

@@ -37,10 +37,15 @@ const submit = async () => {
             email: user.email,
             password: password.value,
         })
-
-        console.log('Votre inscription à bien été enregistré !')
+        ElMessage({
+            message: 'Votre inscription à bien été enregistré !',
+            type: 'success',
+        })
     } catch (error) {
-        console.error("Une erreur s'est produite :", error.message)
+        ElMessage({
+            message: "Une erreur s'est produite : " + error.message,
+            type: 'error',
+        })
     }
 }
 </script>
