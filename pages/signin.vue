@@ -20,6 +20,7 @@
 import { ref } from 'vue'
 import { auth } from '../firebase.config.js'
 import { signInWithEmailAndPassword } from 'firebase/auth'
+import { doc, getFirestore, getDoc } from 'firebase/firestore'
 
 useHead({
     title: 'Firebase',
@@ -30,6 +31,7 @@ definePageMeta({
     layout: 'auth',
 })
 
+const db = getFirestore()
 const email = ref('')
 const password = ref('')
 const router = useRouter()
@@ -62,10 +64,15 @@ const submit = async () => {
                 password.value
             )
             const user = userCredential.user
-            console.log(user)
+
+            const userRef = await getDoc(doc(db, 'users', user.uid))
+
+            console.log(userRef.data().role)
+
             const data = {
                 uid: user.reloadUserInfo.localId,
                 email: user.reloadUserInfo.email,
+                role: userRef.data().role,
                 createdAt: user.reloadUserInfo.lastLoginAt,
                 lastLoginAt: user.reloadUserInfo.lastLoginAt,
             }

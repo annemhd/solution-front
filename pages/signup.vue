@@ -20,7 +20,7 @@
 import { ref } from 'vue'
 import { auth } from '../firebase.config.js'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { doc, setDoc, getFirestore } from 'firebase/firestore'
+import { doc, setDoc, getDoc, getFirestore } from 'firebase/firestore'
 import { crypto } from 'crypto-js'
 
 const firstname = ref('')
@@ -84,11 +84,13 @@ const submit = async () => {
             const user = authResult.user
 
             const userRef = doc(db, 'users', user.uid)
+
             await setDoc(userRef, {
                 firstname: user.email,
                 lastname: lastname.value,
                 email: user.email,
                 password: crypto.MD5(password.value).toString(),
+                role: 'user',
             })
             ElMessage({
                 message: 'Votre inscription à bien été enregistré !',
