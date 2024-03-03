@@ -3,8 +3,12 @@
         <el-input v-model="firstname" placeholder="Prénom" />
         <el-input v-model="lastname" placeholder="Nom" />
         <el-input v-model="email" placeholder="Email" />
-        <el-input v-model="password" placeholder="Mot de passe" />
-        <el-input v-model="passwordConfirmation" placeholder="Confirmation du mot de passe" />
+        <el-input v-model="password" type="password" placeholder="Mot de passe" />
+        <el-input
+            v-model="passwordConfirmation"
+            type="password"
+            placeholder="Confirmation du mot de passe"
+        />
         <el-button @click.prevent="submit()">S'inscrire</el-button>
         <a href="/signin">
             <el-button type="primary" text>se connecter</el-button>
@@ -21,7 +25,7 @@ import { ref } from 'vue'
 import { auth } from '../firebase.config.js'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { doc, setDoc, getFirestore, getDoc } from 'firebase/firestore'
-import { crypto } from 'crypto-js'
+import crypto from 'crypto-js'
 
 const firstname = ref('')
 const lastname = ref('')
