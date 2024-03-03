@@ -19,6 +19,7 @@
                             required
                         />
                     </el-form-item>
+                    <Upload @event="handleEvent()" />
                 </el-col>
 
                 <el-form-item>
@@ -70,22 +71,25 @@
                             class="product_list_item_button_add text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
                             @click="addToCart(product)"
                         >
-                            Add to cart
+                            Ajouter au panier
                         </button>
-                        <button
-                            type="button"
-                            class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
-                            @click="deleteProduct(product.id)"
-                        >
-                            Delete
-                        </button>
-                        <button
-                            type="button"
-                            class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
-                            @click="openEditPopup(product)"
-                        >
-                            Modifier
-                        </button>
+
+                        <div v-if="user">
+                            <button
+                                type="button"
+                                class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+                                @click="deleteProduct(product.id)"
+                            >
+                                Supprimer
+                            </button>
+                            <button
+                                type="button"
+                                class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+                                @click="openEditPopup(product)"
+                            >
+                                Modifier
+                            </button>
+                        </div>
                     </div>
                 </div>
             </li>
@@ -109,7 +113,7 @@
                 </div>
                 <div class="mb-5">
                     <label for="price" class="block mb-2 text-sm font-medium text-gray-900"
-                        >Price</label
+                        >Prix</label
                     >
                     <input
                         type="number"
@@ -124,7 +128,7 @@
                 </div>
                 <div class="mb-5">
                     <label for="name" class="block mb-2 text-sm font-medium text-gray-900"
-                        >Name</label
+                        >Nom</label
                     >
                     <input
                         type="text"
@@ -140,14 +144,14 @@
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center me-2"
                     @click.prevent="updateProduct()"
                 >
-                    Update product
+                    Mettre à jour
                 </button>
                 <button
                     type="button"
                     class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
                     @click.prevent="closeEditPopup()"
                 >
-                    Cancel
+                    Annuler
                 </button>
             </form>
         </div>
@@ -168,6 +172,7 @@ import {
 } from 'firebase/firestore'
 import { onMounted, ref } from 'vue'
 import { app } from '~/firebase.config.js'
+import Upload from '../components/upload.vue'
 
 const TOKEN = localStorage.getItem('TOKEN')
 const user = localStorage.getItem('user')
@@ -183,6 +188,7 @@ const editingProduct = ref(null)
 const isEditingPopupOpen = ref(false)
 const cartCollection = collection(getFirestore(app), 'cart')
 const dialogVisible = ref(false)
+const img = ref([])
 
 const fetchProducts = async () => {
     const productsCollection = collection(db, 'products')
@@ -219,6 +225,12 @@ const addToCart = async (product) => {
                     quantity: 1,
                 })
             }
+            ElNotification({
+                title: '',
+                message: "L'article a bien été ajouté",
+                type: 'success',
+            })
+
             console.log('Product added to cart successfully.')
         } else {
             console.error('User information not found in local storage.')
@@ -276,6 +288,7 @@ const deleteProduct = async (productId) => {
 }
 
 const submitForm = () => {
+    handleEvent()
     if (newProduct.value.name && newProduct.value.price && newProduct.value.image) {
         addProduct(newProduct.value)
         dialogVisible.value = false
@@ -288,6 +301,11 @@ const submitForm = () => {
 onMounted(() => {
     fetchProducts()
 })
+
+const handleEvent = (img) => {
+    img.value = img
+    console.log(img.value)
+}
 </script>
 
 <style scoped>

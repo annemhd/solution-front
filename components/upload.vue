@@ -20,14 +20,17 @@
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
 import { storage } from '../firebase.config.js'
 
+const emit = defineEmits(['event'])
+
 let uploadRef
 
-const mountainsRef = ref(storage, 'Yayoi Kusama.jpg')
+const mountainsRef = ref(storage, 'hebfhzevbhezgfh.jpg')
 
 const sub = () => {
     console.log(uploadRef)
     uploadRef.submit()
     uploadBytes(mountainsRef, uploadRef).then((snapshot) => {
+        emit('event', snapshot)
         console.log('Uploaded a blob or file!' + snapshot)
     })
 }

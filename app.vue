@@ -13,8 +13,6 @@ const route = useRoute()
 const layout = computed(() => {
     if (route.name === 'signin' || route.name === 'signup') {
         return 'auth'
-    } else if (route.name === 'dashboard') {
-        return 'dashboard'
     } else {
         return 'default'
     }
